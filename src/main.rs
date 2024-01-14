@@ -44,7 +44,7 @@ fn main() {
 }
 
 fn printing(width: usize,chance: f64, args: &Args, vec_print: &mut VecDeque<String>) {
-    let line = generate_lines(width, chance, args);
+    let line = generate_line(width, chance, args);
     vec_print.pop_back();
     vec_print.push_front(line);
 
@@ -55,23 +55,26 @@ fn printing(width: usize,chance: f64, args: &Args, vec_print: &mut VecDeque<Stri
     clear_screen().expect("Unsupported terminal");
 }
 
-fn generate_lines(width: usize, chance: f64, args: &Args) -> String {
-    let mut builder = " ".to_string();
-    for _ in 0..width-1 {
-        let random = thread_rng().gen_bool(chance);
-        let last = builder.chars().last().unwrap();
-        let char = if random {
-            if args.space_between && last == args.snowflake {
-                args.air
-            } else {
-                args.snowflake
-            }
-        } else {
-            args.air
-        };
-        builder.push(char);
+fn generate_line(width: usize, chance: f64, args: &Args) -> String {
+    let mut builder = String::with_capacity(width);
+    for _ in 0..width {
+        let last_char = builder.chars().last().unwrap();
+        builder.push(gen_char(chance, args,last_char));
     }
     builder
+}
+
+fn gen_char(chance: f64, args: &Args, last_char: char) -> char {
+    let random = thread_rng().gen_bool(chance);
+    if random {
+        if args.space_between && last_char == args.snowflake {
+            args.air
+        } else {
+            args.snowflake
+        }
+    } else {
+        args.air
+    }
 }
 
 fn clear_screen() -> Result<(), std::io::Error> {
