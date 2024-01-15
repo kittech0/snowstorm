@@ -25,16 +25,15 @@ impl<T: Write> Terminal<T> {
     }
 
     pub fn setup(&mut self) {
-        let out = &mut self.out;
         enable_raw_mode().expect("Failed to enable raw mode");
-        queue!(out,EnterAlternateScreen).expect("Failed to enter alternate screen");
-        queue!(out,DisableLineWrap).expect("Failed to disable line wrap");
-        queue!(out,Clear(ClearType::All)).expect("Failed to clear screen");
-        queue!(out,cursor::Hide).expect("Failed to hide cursor");
-        queue!(out,SetTitle("Snowstorm")).expect("Failed to set title");
-        queue!(out,MoveToRow(0)).expect("Failed to move cursor");
-        queue!(out,BeginSynchronizedUpdate).expect("Failed to begin synchronized update");
-        out.flush().expect("Failed to flush");
+        queue!(self.out,EnterAlternateScreen).expect("Failed to enter alternate screen");
+        queue!(self.out,DisableLineWrap).expect("Failed to disable line wrap");
+        queue!(self.out,Clear(ClearType::All)).expect("Failed to clear screen");
+        queue!(self.out,cursor::Hide).expect("Failed to hide cursor");
+        queue!(self.out,SetTitle("Snowstorm")).expect("Failed to set title");
+        queue!(self.out,MoveToRow(0)).expect("Failed to move cursor");
+        queue!(self.out,BeginSynchronizedUpdate).expect("Failed to begin synchronized update");
+        self.out.flush().expect("Failed to flush");
     }
 
     pub fn main_loop(&mut self) {
@@ -69,14 +68,13 @@ impl<T: Write> Terminal<T> {
     }
 
     fn restore(&mut self) {
-        let out = &mut self.out;
         disable_raw_mode().expect("Failed to disable raw mode");
-        queue!(out,EnableLineWrap).expect("Failed to enable line wrap");
-        queue!(out,cursor::Show).expect("Failed to show cursor");
-        queue!(out,SetTitle("")).expect("Failed to set title");
-        queue!(out,LeaveAlternateScreen).expect("Failed to leave alternate screen");
-        queue!(out,EndSynchronizedUpdate).expect("Failed to begin synchronized update");
-        out.flush().expect("Failed to flush");
+        queue!(self.out,EnableLineWrap).expect("Failed to enable line wrap");
+        queue!(self.out,cursor::Show).expect("Failed to show cursor");
+        queue!(self.out,SetTitle("")).expect("Failed to set title");
+        queue!(self.out,LeaveAlternateScreen).expect("Failed to leave alternate screen");
+        queue!(self.out,EndSynchronizedUpdate).expect("Failed to begin synchronized update");
+        self.out.flush().expect("Failed to flush");
     }
 
     fn generate_line(&self) -> String {
