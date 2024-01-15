@@ -5,6 +5,7 @@ Creates snow storm in your command line
 [Nagranie ekranu z 2024-01-14 22-42-54.webm](https://github.com/JustFoxx/snowstorm/assets/73485099/d6b61ba7-555e-48b2-858c-abb9a53f94e3)
 
 ## Usage
+Use `ESC` to close.
 ```
 Usage: snowstorm [OPTIONS]
 

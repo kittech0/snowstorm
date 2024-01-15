@@ -1,12 +1,8 @@
-use std::{thread};
-use std::collections::VecDeque;
-use std::io::{stdout, Write};
-use std::time::Duration;
-use clap::{Parser};
-use crossterm::{QueueableCommand, terminal};
-use crossterm::terminal::{Clear, ClearType};
-use itertools::Itertools;
-use rand::{Rng, thread_rng};
+use std::io::{BufWriter, stdout};
+use clap::Parser;
+use crate::terminal::Terminal;
+
+mod terminal;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -29,59 +25,17 @@ struct Args {
     space_between: bool,
 }
 
-fn main() {
+fn main()  {
     let args = Args::parse();
+    let out = BufWriter::new(stdout());
+    let (width, height) = crossterm::terminal::size().expect("Failed to get terminal size");
+    let mut terminal = Terminal::new(out, args, height as usize, width as usize);
 
-    clear_screen().expect("Unsupported terminal");
-
-    let chance = args.distribution as f64 / u8::MAX as f64;
-    let (width,height) = terminal::size().expect("Unsupported terminal");
-    let mut vec_print = VecDeque::from(vec![" ".repeat(width as usize);height as usize]);
-
+    terminal.setup();
     loop {
-        printing(width as usize,chance, &args, &mut vec_print)
+        terminal.event_loop();
+        terminal.main_loop();
     }
-}
-
-fn printing(width: usize,chance: f64, args: &Args, vec_print: &mut VecDeque<String>) {
-    let line = generate_line(width, chance, args);
-    vec_print.pop_back();
-    vec_print.push_front(line);
-
-    let print_string =  vec_print.iter().join("\n");
-    print!("{}", print_string);
-
-    thread::sleep(Duration::from_millis(args.speed));
-    clear_screen().expect("Unsupported terminal");
-}
-
-fn generate_line(width: usize, chance: f64, args: &Args) -> String {
-    let mut builder = String::with_capacity(width);
-    for _ in 0..width {
-        let last_char = builder.chars().last().unwrap();
-        builder.push(gen_char(chance, args,last_char));
-    }
-    builder
-}
-
-fn gen_char(chance: f64, args: &Args, last_char: char) -> char {
-    let random = thread_rng().gen_bool(chance);
-    if random {
-        if args.space_between && last_char == args.snowflake {
-            args.air
-        } else {
-            args.snowflake
-        }
-    } else {
-        args.air
-    }
-}
-
-fn clear_screen() -> Result<(), std::io::Error> {
-    let mut out = stdout();
-    out.queue(Clear(ClearType::All))?;
-    out.flush()?;
-    Ok(())
 }
 
 
