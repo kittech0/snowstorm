@@ -1,13 +1,19 @@
 [package]
 name = "snowstorm"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["Kittech <kittech@skiff.com"]
 license = "Apache-2.0"
+description = "Creates snow storm in your command line"
+repository = "https://github.com/JustFoxx/snowstorm"
+keywords = ["cli", "snowstorm", "effect", "animation"]
+readme = "README.md"
+categories = ["command-line-utilities"]
+include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.4.16", features = ["derive"] }
+clap = { version = "4.4.17", features = ["derive", "unicode"] }
 crossterm = "0.27.0"
 rand = "0.8.5"
