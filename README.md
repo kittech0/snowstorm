@@ -7,14 +7,29 @@ Creates snow storm in your command line
 ## Usage
 Use `ESC` to close.
 ```
+Creates snow storm in your command line
+
 Usage: snowstorm [OPTIONS]
 
 Options:
-  -d, --distribution <DISTRIBUTION>  [default: 50]
-  -S, --speed <SPEED>                [default: 1000]
-  -s, --snowflake <SNOWFLAKE>        [default: *]
-  -a, --air <AIR>                    [default: " "]
-  -B, --space-between                
-  -h, --help                         Print help
-  -V, --version                      Print version
+  -d, --distribution <DISTRIBUTION>
+          0 - 100 (float) [default: 20]
+  -z, --speed <SPEED>
+          Speed in milliseconds (Smaller -> faster) [default: 1000]
+  -p, --particle <PARTICLE>
+          Particle character [default: *]
+  -s, --space <SPACE>
+          Space character [default: " "]
+  -B, --space-between
+          Space between particles
+  -P, --particle-color <PARTICLE_COLOR>
+          Particle color (ANSI)
+  -c, --background-color <BACKGROUND_COLOR>
+          Background color (ANSI)
+  -S, --space-color <SPACE_COLOR>
+          Space color (ANSI)
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
