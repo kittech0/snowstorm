@@ -50,7 +50,7 @@ impl<T: Write> Terminal<T> {
         if let Ok(true) = poll(Duration::from_millis(5)) {
             match read().expect("Failed to read event") {
                 Event::Resize(width, height) => {
-                    if self.height < height as usize || self.width < width as usize {
+                    if self.width < width as usize {
                         execute!(self.out,Clear(ClearType::All)).expect("Failed to clear screen");
                     }
                     self.height = height as usize;
